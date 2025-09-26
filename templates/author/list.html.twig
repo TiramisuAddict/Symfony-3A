@@ -1,0 +1,24 @@
+<h1> authors</h1>
+
+<h3>{{ authors|length }} author(s) found</h3>
+{% set totalBooks = 0 %}
+
+{% if authors is empty%}
+
+<h3>no authors found :c </h3>
+
+{% else %}
+
+{% for author in authors %}
+    <img src="{{ author['picture'] }}" alt="image" width="100"></br>
+    {{author['username'] | upper}}</br>
+    {{author['email']}}</br>
+    {{author['nb_books']}}
+    <a href="{{ path('app_author_details', {'id': author['id']} ) }}">Details</a>
+
+    {% set totalBooks = totalBooks + author['nb_books'] %}
+    </br>
+{% endfor %}
+{% endif %}
+
+<h3>{{ totalBooks }} available books</h3>
