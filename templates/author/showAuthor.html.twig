@@ -1,6 +1,6 @@
-<h1> {{id ~ " - " ~author['username']}} </h1>
+<h1> {{id ~ " - " ~author.username}} </h1>
 
-<img src="{{ author['picture'] }}" alt="image" width="100"></br>
-{{author['email']}}</br>
-{{author['nb_books'] ~ "  Books Available"}}
+<img src="{{ author.picture }}" alt="image" width="100"></br>
+{{author.email}}</br>
+{{author.nb_books ~ "  Books Available"}}
 </br>

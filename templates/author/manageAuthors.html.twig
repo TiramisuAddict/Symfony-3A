@@ -1,0 +1,20 @@
+<h1> authors</h1>
+
+<h3>{{ authors|length }} author(s) found</h3>
+
+{% if authors is empty%}
+
+<h3>no authors found :c </h3>
+
+{% else %}
+<table border="1">
+{% for author in authors %}
+        <tr>
+            <td>{{author.username | upper}}</td>
+            <td>{{author.email}}</td>
+            <td><a href="{{ path('app_author_update',{'id' : author.id}) }}">Update</a></td>
+            <td><a href="{{ path('app_author_remove', {'id': author.id} ) }}">Delete</a></td>
+        </tr>
+{% endfor %}
+<table/>
+{% endif %}

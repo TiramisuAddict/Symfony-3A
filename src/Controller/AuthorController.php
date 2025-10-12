@@ -6,6 +6,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
+use App\Entity\Author;
+use Doctrine\Persistence\ManagerRegistry;
+use App\Repository\AuthorRepository;
+
 final class AuthorController extends AbstractController
 {
     private $authors = array(
@@ -40,11 +44,68 @@ final class AuthorController extends AbstractController
         ]);
     }
 
-    #[Route('author/list', name: 'lapp_author_list')]
+    #[Route('author/list', name: 'app_author_list')]
     public function listAuthors(){
 
         return $this->render('author/list.html.twig' , [
             'authors' => $this->authors,
+        ]);
+    }
+
+    //MANAGE AUTHORS PAGE
+    #[Route('author/list/manage', name: 'app_author_manage_list')]
+    public function manageAuthorList(AuthorRepository $auth_repository){
+        $authors = $auth_repository->findAll();
+        return $this->render('author/manageAuthors.html.twig' , [
+            'authors' => $authors,
+        ]);
+    }
+
+    //CREATE
+    #[Route('author/addAuthor', name: 'app_author_add')]
+    public function addAuthor(ManagerRegistry $doctrine , AuthorRepository $auth_repository): Response{
+        $em = $doctrine->getManager();
+
+        $author = new Author();
+        $author->setUsername('New Author');
+        $author->setEmail('new.author@gmail.com');
+        
+        $em->persist($author);
+        $em->flush();
+
+        return $this->render('author/add.html.twig' , [
+            'author' => $auth_repository->find($author->getId()), //READ
+        ]);
+    }
+
+    //UPDATE
+    #[Route('author/updateAuthor/{id}', name:'app_author_update')]
+    public function updateAuthor(ManagerRegistry $doctrine , AuthorRepository $auth_repository , $id): Response{
+        $em = $doctrine->getManager();
+
+        $obj = $auth_repository->find($id);
+        $obj->setUsername("foulen");
+        $obj->setEmail("foulen.fouleni@gmail.com");
+
+        $em->persist($obj);
+        $em->flush();
+
+        return $this->redirectToRoute('app_author_manage_list' , [
+            'authors' => $auth_repository->findAll(),
+        ]);
+    }
+
+    //DELETE
+    #[Route('author/removeAuthor/{id}', name: 'app_author_remove')]
+    public function removeAuthor(ManagerRegistry $doctrine , AuthorRepository $auth_repository, $id): Response{
+        $em = $doctrine->getManager();
+        
+        $obj = $auth_repository->find($id);
+        $em->remove($obj);
+        $em->flush();
+
+        return $this->redirectToRoute('app_author_manage_list' , [
+            'authors' => $auth_repository->findAll(),
         ]);
     }
 
