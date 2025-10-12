@@ -20,7 +20,12 @@
     <td><strong>Commit(s)</strong></td>
   </tr>
   <tr>
-    <td>Atelier n°4</td>
+    <td>Atelier n°4 [2] </td>
+    <td><a href="https://github.com/TiramisuAddict/Symfony-3A/blob/main/Documents/%5Batelier4%5DORM-Doctrine.pdf">Link</a></td>
+    <td><a href="https://github.com/TiramisuAddict/Symfony-3A/tree/8a9881af4a8e1e7fee0a29711fb0399b107c9293">Link</a></td>
+  </tr>
+  <tr>
+    <td>Atelier n°4 [1] </td>
     <td><a href="https://github.com/TiramisuAddict/Symfony-3A/blob/main/Documents/%5Batelier4%5DORM-Doctrine.pdf">Link</a></td>
     <td><a href="https://github.com/TiramisuAddict/Symfony-3A/tree/0121dc5795e1fd5dd435cbb97daf13f47e4f0ce7">Link</a></td>
   </tr>
