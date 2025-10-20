@@ -22,8 +22,8 @@ class Book
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTime $publicationDate = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $enabled = null;
+    #[ORM\Column(type: Types::BOOLEAN, nullable: true)]
+    private ?bool $published = null;
 
     #[ORM\ManyToOne(inversedBy: 'authorBooks')]
     private ?Author $authorBooks = null;
@@ -33,6 +33,9 @@ class Book
      */
     #[ORM\ManyToMany(targetEntity: Reader::class, inversedBy: 'bookReaders')]
     private Collection $bookReaders;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $category = null;
 
     public function __construct()
     {
@@ -68,14 +71,14 @@ class Book
         return $this;
     }
 
-    public function getEnabled(): ?string
+    public function getPublished(): ?bool
     {
-        return $this->enabled;
+        return $this->published;
     }
 
-    public function setEnabled(?string $enabled): static
+    public function setPublished(?bool $published): static
     {
-        $this->enabled = $enabled;
+        $this->published = $published;
 
         return $this;
     }
@@ -112,6 +115,18 @@ class Book
     public function removeBookReader(Reader $bookReader): static
     {
         $this->bookReaders->removeElement($bookReader);
+
+        return $this;
+    }
+
+    public function getCategory(): ?string
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?string $category): static
+    {
+        $this->category = $category;
 
         return $this;
     }

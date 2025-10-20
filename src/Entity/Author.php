@@ -27,6 +27,9 @@ class Author
     #[ORM\OneToMany(targetEntity: Book::class, mappedBy: 'authorBooks')]
     private Collection $authorBooks;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $nb_books = null;
+
     public function __construct()
     {
         $this->authorBooks = new ArrayCollection();
@@ -87,6 +90,18 @@ class Author
                 $authorBook->setAuthorBooks(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getNbBooks(): ?int
+    {
+        return $this->nb_books;
+    }
+
+    public function setNbBooks(?int $nb_books): static
+    {
+        $this->nb_books = $nb_books;
 
         return $this;
     }

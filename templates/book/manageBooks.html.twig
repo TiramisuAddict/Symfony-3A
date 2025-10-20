@@ -1,0 +1,44 @@
+
+{% set nbrPublishedBooks = 0 %}
+{% set nbrUnpublishedBooks = 0 %}
+
+<table border="1">
+    <tr>
+        <td>Title</td>
+        <td>Publication Date</td>
+        <td>Published</td>
+        <td>Category</td>
+        <td>Author</td>
+        <td>Actions</td>
+    <tr/>
+    <tr>
+    {% for book in books %}
+        {% if book.published == 1 %}
+            {% set nbrPublishedBooks = nbrPublishedBooks + 1 %}
+            <td>{{book.title}}</td>
+            <td>{{book.publicationDate|date("d-m-Y")}}</td>
+            <td>{{book.published}}</td>
+            <td>{{book.category}}</td>
+            <td>{{book.authorBooks.username}}</td>
+            <td>
+                <a href="{{path('app_book_edit',{'id':book.id})}}">edit</a>
+                <a href="{{path('app_book_delete',{'id':book.id})}}">delete</a>
+                <a href="{{path('app_book_show',{'id':book.id})}}">show</a>
+            </td>
+        {% else %}
+            {% set nbrUnpublishedBooks = nbrUnpublishedBooks + 1 %}
+        {% endif %}
+    <tr/>
+    {% else %}
+        <h3> No publisher found </h3>
+    
+    {% endfor %}
+    
+</table>
+
+<h4> Number of published books : {{nbrPublishedBooks}} </h4>
+<h4> Number of unpublished books : {{nbrUnpublishedBooks}} </h4>
+
+
+
+

@@ -66,7 +66,7 @@ final class AuthorController extends AbstractController
 
     //FORM : CREATE AUTHOR
     #[Route('author/form/add', name: 'app_author_form')]
-    public function addFormAuthorMaker(Request $request, ManagerRegistry $doctrine) : Response{
+    public function addForm(Request $request, ManagerRegistry $doctrine) : Response{
         $author = new Author();
         $form = $this->createForm(AuthorType::class,$author);
 
@@ -105,9 +105,7 @@ final class AuthorController extends AbstractController
             $em->persist($obj);
             $em->flush();
             
-            return $this->redirectToRoute('app_author_manage_list' , [
-                'authors' => $repository->findAll(),
-            ]);
+            return $this->redirectToRoute('app_author_manage_list');
         }
 
         return $this->render('author/addAuthor.html.twig', [ //For future me : I used the same form don't panic
@@ -124,9 +122,23 @@ final class AuthorController extends AbstractController
         $em->remove($obj);
         $em->flush();
 
-        return $this->redirectToRoute('app_author_manage_list' , [
-            'authors' => $auth_repository->findAll(),
-        ]);
+        return $this->redirectToRoute('app_author_manage_list');
+    }
+
+    //DELETE AUTHORS WITHOUT BOOKS (NBRBOOKS = 0)
+    #[Route('author/clearAuthors', name: 'app_author_clear')]
+    public function removeAuthorWithoutBooks(ManagerRegistry $doctrine , AuthorRepository $auth_repository): Response{
+        $em = $doctrine->getManager();
+        
+        $authors = $auth_repository->findAll();
+        foreach ($authors as $author){
+            if($author->getNbBooks() == 0){
+                $em->remove($author);
+                $em->flush();
+            }
+        }
+
+        return $this->redirectToRoute('app_author_manage_list');
     }
 
     #[Route('author/details={id}', name: 'app_author_details')]
