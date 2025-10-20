@@ -21,6 +21,17 @@ class Author
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $email = null;
 
+    /**
+     * @var Collection<int, Book>
+     */
+    #[ORM\OneToMany(targetEntity: Book::class, mappedBy: 'authorBooks')]
+    private Collection $authorBooks;
+
+    public function __construct()
+    {
+        $this->authorBooks = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -46,6 +57,36 @@ class Author
     public function setEmail(?string $email): static
     {
         $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Book>
+     */
+    public function getAuthorBooks(): Collection
+    {
+        return $this->authorBooks;
+    }
+
+    public function addAuthorBook(Book $authorBook): static
+    {
+        if (!$this->authorBooks->contains($authorBook)) {
+            $this->authorBooks->add($authorBook);
+            $authorBook->setAuthorBooks($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAuthorBook(Book $authorBook): static
+    {
+        if ($this->authorBooks->removeElement($authorBook)) {
+            // set the owning side to null (unless already changed)
+            if ($authorBook->getAuthorBooks() === $this) {
+                $authorBook->setAuthorBooks(null);
+            }
+        }
 
         return $this;
     }

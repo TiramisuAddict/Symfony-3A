@@ -25,9 +25,18 @@ class Book
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $enabled = null;
 
+    #[ORM\ManyToOne(inversedBy: 'authorBooks')]
+    private ?Author $authorBooks = null;
+
+    /**
+     * @var Collection<int, Reader>
+     */
+    #[ORM\ManyToMany(targetEntity: Reader::class, inversedBy: 'bookReaders')]
+    private Collection $bookReaders;
+
     public function __construct()
     {
-        $this->book_reader = new ArrayCollection();
+        $this->bookReaders = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -67,6 +76,42 @@ class Book
     public function setEnabled(?string $enabled): static
     {
         $this->enabled = $enabled;
+
+        return $this;
+    }
+
+    public function getAuthorBooks(): ?Author
+    {
+        return $this->authorBooks;
+    }
+
+    public function setAuthorBooks(?Author $authorBooks): static
+    {
+        $this->authorBooks = $authorBooks;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Reader>
+     */
+    public function getBookReaders(): Collection
+    {
+        return $this->bookReaders;
+    }
+
+    public function addBookReader(Reader $bookReader): static
+    {
+        if (!$this->bookReaders->contains($bookReader)) {
+            $this->bookReaders->add($bookReader);
+        }
+
+        return $this;
+    }
+
+    public function removeBookReader(Reader $bookReader): static
+    {
+        $this->bookReaders->removeElement($bookReader);
 
         return $this;
     }
